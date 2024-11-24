@@ -31,7 +31,7 @@ def initialize_ui_interface(config, headless, use_shell, release_info, readme_co
     css = read_file_content("./assets/style.css")
 
     # Create the main Gradio Blocks interface
-    ui_interface = gr.Blocks(css=css, title=f"Kohya_ss GUI {release_info}", theme=gr.themes.Default())
+    ui_interface = gr.Blocks(css=css, title=f"Kohya_ss GUI {release_info}", theme=gr.themes.Origin())
     with ui_interface:
         # Create tabs for different functionalities
         with gr.Tab("Dreambooth"):
