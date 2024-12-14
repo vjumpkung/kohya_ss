@@ -33,5 +33,6 @@ toml==0.10.2
 transformers==4.44.2
 voluptuous==0.13.1
 wandb==0.18.0
+prodigy-plus-schedule-free @ git+http://github.com/LoganBooker/prodigy-plus-schedule-free@23f752a
 # for kohya_ss sd-scripts library
 -e ./sd-scripts
