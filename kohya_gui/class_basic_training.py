@@ -5,6 +5,7 @@ from .custom_logging import setup_logging
 # Set up logging
 log = setup_logging()
 
+
 class BasicTraining:
     """
     This class configures and initializes the basic training settings for a machine learning model,
@@ -45,11 +46,11 @@ class BasicTraining:
         self.learning_rate_value = learning_rate_value
         self.lr_scheduler_value = lr_scheduler_value
         self.lr_warmup_value = lr_warmup_value
-        self.lr_warmup_steps_value= lr_warmup_steps_value
+        self.lr_warmup_steps_value = lr_warmup_steps_value
         self.finetuning = finetuning
         self.dreambooth = dreambooth
         self.config = config
-        
+
         # Initialize old_lr_warmup and old_lr_warmup_steps with default values
         self.old_lr_warmup = 0
         self.old_lr_warmup_steps = 0
@@ -165,17 +166,18 @@ class BasicTraining:
                     "constant",
                     "constant_with_warmup",
                     "cosine",
+                    "cosine_with_min_lr",
                     "cosine_with_restarts",
+                    "inverse_sqrt",
                     "linear",
                     "piecewise_constant",
                     "polynomial",
-                    "cosine_with_min_lr",
-                    "inverse_sqrt",
+                    "reduce_lr_on_plateau",
                     "warmup_stable_decay",
                 ],
                 value=self.config.get("basic.lr_scheduler", self.lr_scheduler_value),
             )
-            
+
             # Initialize the learning rate scheduler type dropdown
             self.lr_scheduler_type = gr.Dropdown(
                 label="LR Scheduler type",
@@ -187,7 +189,7 @@ class BasicTraining:
                 value=self.config.get("basic.lr_scheduler_type", ""),
                 allow_custom_value=True,
             )
-            
+
             # Initialize the optimizer dropdown
             self.optimizer = gr.Dropdown(
                 label="Optimizer",
@@ -214,6 +216,7 @@ class BasicTraining:
                     "PagedLion8bit",
                     "Prodigy",
                     "prodigyplus.ProdigyPlusScheduleFree",
+                    "RAdamScheduleFree",
                     "SGDNesterov",
                     "SGDNesterov8bit",
                     "SGDScheduleFree",
@@ -313,19 +316,21 @@ class BasicTraining:
             # Initialize the learning rate warmup steps override
             self.lr_warmup_steps = gr.Number(
                 label="LR warmup steps (override)",
-                value=self.config.get("basic.lr_warmup_steps", self.lr_warmup_steps_value),
+                value=self.config.get(
+                    "basic.lr_warmup_steps", self.lr_warmup_steps_value
+                ),
                 minimum=0,
                 step=1,
             )
-            
+
             def lr_scheduler_changed(scheduler, value, value_lr_warmup_steps):
                 if scheduler == "constant":
                     self.old_lr_warmup = value
                     self.old_lr_warmup_steps = value_lr_warmup_steps
                     value = 0
                     value_lr_warmup_steps = 0
-                    interactive=False
-                    info="Can't use LR warmup with LR Scheduler constant... setting to 0 and disabling field..."
+                    interactive = False
+                    info = "Can't use LR warmup with LR Scheduler constant... setting to 0 and disabling field..."
                 else:
                     if self.old_lr_warmup != 0:
                         value = self.old_lr_warmup
@@ -333,10 +338,14 @@ class BasicTraining:
                     if self.old_lr_warmup_steps != 0:
                         value_lr_warmup_steps = self.old_lr_warmup_steps
                         self.old_lr_warmup_steps = 0
-                    interactive=True
-                    info=""
-                return gr.Slider(value=value, interactive=interactive, info=info), gr.Number(value=value_lr_warmup_steps, interactive=interactive, info=info)
-            
+                    interactive = True
+                    info = ""
+                return gr.Slider(
+                    value=value, interactive=interactive, info=info
+                ), gr.Number(
+                    value=value_lr_warmup_steps, interactive=interactive, info=info
+                )
+
             self.lr_scheduler.change(
                 lr_scheduler_changed,
                 inputs=[self.lr_scheduler, self.lr_warmup, self.lr_warmup_steps],
@@ -353,7 +362,7 @@ class BasicTraining:
                 label="LR # cycles",
                 minimum=1,
                 # precision=0, # round to nearest integer
-                step=1, # Increment value by 1
+                step=1,  # Increment value by 1
                 info="Number of restarts for cosine scheduler with restarts",
                 value=self.config.get("basic.lr_scheduler_num_cycles", 1),
             )
