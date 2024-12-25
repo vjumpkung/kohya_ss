@@ -2,7 +2,14 @@ import gradio as gr
 import subprocess
 import os
 import sys
-from .common_gui import get_folder_path, get_file_path, scriptdir, list_files, list_dirs, setup_environment
+from .common_gui import (
+    get_folder_path,
+    get_file_path,
+    scriptdir,
+    list_files,
+    list_dirs,
+    setup_environment,
+)
 
 from .custom_logging import setup_logging
 
@@ -137,7 +144,7 @@ def gradio_convert_model_tab(headless=False):
         model_ext_name = gr.Textbox(value="Model types", visible=False)
 
         with gr.Group(), gr.Row():
-            with gr.Column(), gr.Row():
+            with gr.Column(), gr.Row(equal_height=True):
                 source_model_input = gr.Dropdown(
                     label="Source model (path to source model folder of file to convert...)",
                     interactive=True,
@@ -196,7 +203,7 @@ def gradio_convert_model_tab(headless=False):
                     allow_custom_value=True,
                 )
         with gr.Group(), gr.Row():
-            with gr.Column(), gr.Row():
+            with gr.Column(), gr.Row(equal_height=True):
                 target_model_folder_input = gr.Dropdown(
                     label="Target model folder (path to target model folder of file name to create...)",
                     interactive=True,

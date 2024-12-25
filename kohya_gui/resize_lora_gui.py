@@ -7,7 +7,8 @@ from .common_gui import (
     get_file_path,
     scriptdir,
     list_files,
-    create_refresh_button, setup_environment
+    create_refresh_button,
+    setup_environment,
 )
 
 from .custom_logging import setup_logging
@@ -129,7 +130,7 @@ def gradio_resize_lora_tab(
         lora_ext = gr.Textbox(value="*.safetensors *.pt", visible=False)
         lora_ext_name = gr.Textbox(value="LoRA model types", visible=False)
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             model = gr.Dropdown(
                 label="Source LoRA (path to the LoRA to resize)",
                 interactive=True,

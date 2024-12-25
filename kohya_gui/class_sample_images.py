@@ -104,7 +104,6 @@ def create_prompt_file(sample_prompts, output_dir):
 #     return run_cmd
 
 
-
 class SampleImages:
     """
     A class for managing the Gradio interface for sampling images during training.
@@ -118,7 +117,7 @@ class SampleImages:
         Initializes the SampleImages class.
         """
         self.config = config
-        
+
         self.initialize_accordion()
 
     def initialize_accordion(self):
@@ -126,6 +125,11 @@ class SampleImages:
         Initializes the accordion for the Gradio interface.
         """
         with gr.Row():
+
+            self.enable_sample = gr.Checkbox(
+                label="Enable image generation sample.", interactive=True, value=False
+            )
+
             self.sample_every_n_steps = gr.Number(
                 label="Sample every n steps",
                 value=self.config.get("samples.sample_every_n_steps", 0),

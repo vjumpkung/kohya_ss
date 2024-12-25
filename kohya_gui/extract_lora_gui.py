@@ -8,7 +8,8 @@ from .common_gui import (
     is_file_writable,
     scriptdir,
     list_files,
-    create_refresh_button, setup_environment
+    create_refresh_button,
+    setup_environment,
 )
 
 from .custom_logging import setup_logging
@@ -157,7 +158,7 @@ def gradio_extract_lora_tab(
         model_ext = gr.Textbox(value="*.ckpt *.safetensors", visible=False)
         model_ext_name = gr.Textbox(value="Model types", visible=False)
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             model_tuned = gr.Dropdown(
                 label="Finetuned model (path to the finetuned model to extract)",
                 interactive=True,
@@ -226,7 +227,7 @@ def gradio_extract_lora_tab(
                 info="only for SDXL",
                 visible=False,
             )
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             save_to = gr.Dropdown(
                 label="Save to (path where to save the extracted LoRA model...)",
                 interactive=True,
@@ -338,7 +339,7 @@ def gradio_extract_lora_tab(
                 outputs=[load_tuned_model_to, load_original_model_to],
             )
 
-            #secondary event on model_tuned for auto-detection of v2/SDXL
+            # secondary event on model_tuned for auto-detection of v2/SDXL
             def change_modeltype_model_tuned(path):
                 detect = SDModelType(path)
                 v2 = gr.Checkbox(value=detect.Is_SD2())
@@ -346,9 +347,7 @@ def gradio_extract_lora_tab(
                 return v2, sdxl
 
             model_tuned.change(
-                change_modeltype_model_tuned,
-                inputs=model_tuned,
-                outputs=[v2, sdxl]
+                change_modeltype_model_tuned, inputs=model_tuned, outputs=[v2, sdxl]
             )
 
         extract_button = gr.Button("Extract LoRA model")

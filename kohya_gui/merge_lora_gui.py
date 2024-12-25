@@ -13,7 +13,8 @@ from .common_gui import (
     get_file_path,
     scriptdir,
     list_files,
-    create_refresh_button, setup_environment
+    create_refresh_button,
+    setup_environment,
 )
 from .custom_logging import setup_logging
 from .sd_modeltype import SDModelType
@@ -111,7 +112,7 @@ class GradioMergeLoRaTab:
             ckpt_ext = gr.Textbox(value="*.safetensors *.ckpt", visible=False)
             ckpt_ext_name = gr.Textbox(value="SD model types", visible=False)
 
-            with gr.Group(), gr.Row():
+            with gr.Group(), gr.Row(equal_height=True):
                 sd_model = gr.Dropdown(
                     label="SD Model (Optional. Stable Diffusion model path, if you want to merge it with LoRA files)",
                     interactive=True,
@@ -146,14 +147,14 @@ class GradioMergeLoRaTab:
                     show_progress=False,
                 )
 
-                #secondary event on sd_model for auto-detection of SDXL
+                # secondary event on sd_model for auto-detection of SDXL
                 sd_model.change(
                     lambda path: gr.Checkbox(value=SDModelType(path).Is_SDXL()),
                     inputs=sd_model,
-                    outputs=sdxl_model
+                    outputs=sdxl_model,
                 )
 
-            with gr.Group(), gr.Row():
+            with gr.Group(), gr.Row(equal_height=True):
                 lora_a_model = gr.Dropdown(
                     label='LoRA model "A" (path to the LoRA A model)',
                     interactive=True,
@@ -238,7 +239,7 @@ class GradioMergeLoRaTab:
                     interactive=True,
                 )
 
-            with gr.Group(), gr.Row():
+            with gr.Group(), gr.Row(equal_height=True):
                 lora_c_model = gr.Dropdown(
                     label='LoRA model "C" (path to the LoRA C model)',
                     interactive=True,
@@ -322,7 +323,7 @@ class GradioMergeLoRaTab:
                     interactive=True,
                 )
 
-            with gr.Group(), gr.Row():
+            with gr.Group(), gr.Row(equal_height=True):
                 save_to = gr.Dropdown(
                     label="Save to (path for the file to save...)",
                     interactive=True,

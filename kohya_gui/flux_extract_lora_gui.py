@@ -112,7 +112,7 @@ def gradio_flux_extract_lora_tab(headless=False):
         model_ext = gr.Textbox(value="*.safetensors", visible=False)
         model_ext_name = gr.Textbox(value="Model types", visible=False)
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             model_org = gr.Dropdown(
                 label="Original Flux model (path to the original model)",
                 interactive=True,
@@ -165,7 +165,7 @@ def gradio_flux_extract_lora_tab(headless=False):
                 show_progress=False,
             )
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             save_to = gr.Dropdown(
                 label="Save to (path where to save the extracted LoRA model...)",
                 interactive=True,

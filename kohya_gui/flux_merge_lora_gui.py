@@ -93,7 +93,7 @@ class GradioFluxMergeLoRaTab:
             flux_ext = gr.Textbox(value="*.safetensors", visible=False)
             flux_ext_name = gr.Textbox(value="FLUX model types", visible=False)
 
-            with gr.Group(), gr.Row():
+            with gr.Group(), gr.Row(equal_height=True):
                 flux_model = gr.Dropdown(
                     label="FLUX Model (Optional. FLUX model path, if you want to merge it with LoRA files via the 'concat' method)",
                     interactive=True,
@@ -127,7 +127,7 @@ class GradioFluxMergeLoRaTab:
                     show_progress=False,
                 )
 
-            with gr.Group(), gr.Row():
+            with gr.Group(), gr.Row(equal_height=True):
                 lora_a_model = gr.Dropdown(
                     label='LoRA model "A" (path to the LoRA A model)',
                     interactive=True,
@@ -212,7 +212,7 @@ class GradioFluxMergeLoRaTab:
                     interactive=True,
                 )
 
-            with gr.Group(), gr.Row():
+            with gr.Group(), gr.Row(equal_height=True):
                 lora_c_model = gr.Dropdown(
                     label='LoRA model "C" (path to the LoRA C model)',
                     interactive=True,
@@ -296,7 +296,7 @@ class GradioFluxMergeLoRaTab:
                     interactive=True,
                 )
 
-            with gr.Group(), gr.Row():
+            with gr.Group(), gr.Row(equal_height=True):
                 save_to = gr.Dropdown(
                     label="Save to (path for the file to save...)",
                     interactive=True,
@@ -360,7 +360,7 @@ class GradioFluxMergeLoRaTab:
                 concat = gr.Checkbox(label="Concat LoRA", value=False)
                 shuffle = gr.Checkbox(label="Shuffle LoRA weights", value=False)
                 no_metadata = gr.Checkbox(label="Don't save metadata", value=False)
-                diffusers  = gr.Checkbox(label="Diffusers LoRA", value=False)
+                diffusers = gr.Checkbox(label="Diffusers LoRA", value=False)
 
             merge_button = gr.Button("Merge model")
 
@@ -418,7 +418,11 @@ class GradioFluxMergeLoRaTab:
             lora_d_model,
         ]
         lora_models = [model for model in models if model]
-        ratios = [ratio for model, ratio in zip(models, [ratio_a, ratio_b, ratio_c, ratio_d]) if model]
+        ratios = [
+            ratio
+            for model, ratio in zip(models, [ratio_a, ratio_b, ratio_c, ratio_d])
+            if model
+        ]
 
         # if not verify_conditions(flux_model, lora_models):
         #     log.info(
@@ -435,13 +439,20 @@ class GradioFluxMergeLoRaTab:
         if flux_model:
             run_cmd.extend(["--flux_model", rf"{flux_model}"])
 
-        run_cmd.extend([
-            "--save_precision", save_precision,
-            "--precision", precision,
-            "--save_to", rf"{save_to}",
-            "--loading_device", loading_device,
-            "--working_device", working_device,
-        ])
+        run_cmd.extend(
+            [
+                "--save_precision",
+                save_precision,
+                "--precision",
+                precision,
+                "--save_to",
+                rf"{save_to}",
+                "--loading_device",
+                loading_device,
+                "--working_device",
+                working_device,
+            ]
+        )
 
         if lora_models:
             run_cmd.append("--models")

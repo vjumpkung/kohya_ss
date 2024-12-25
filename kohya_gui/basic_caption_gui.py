@@ -51,11 +51,13 @@ def caption_images(
         missing_parameters.append("image directory")
     if not caption_ext:
         missing_parameters.append("caption file extension")
-        
+
     if missing_parameters:
         log.info(
             "The following parameter(s) are missing: {}. "
-            "Please provide these to proceed with captioning the images.".format(", ".join(missing_parameters))
+            "Please provide these to proceed with captioning the images.".format(
+                ", ".join(missing_parameters)
+            )
         )
         return
 
@@ -166,7 +168,7 @@ def gradio_basic_caption_gui_tab(headless=False, default_images_dir=None):
             "This utility allows you to create simple caption files for each image in a folder."
         )
         # Group and row for image folder selection
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             # Dropdown for image folder
             images_dir = gr.Dropdown(
                 label="Image folder to caption (containing the images to caption)",
@@ -231,7 +233,7 @@ def gradio_basic_caption_gui_tab(headless=False, default_images_dir=None):
                 interactive=True,
             )
         # Group and row for find and replace text
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             # Textbox for find text
             find_text = gr.Textbox(
                 label="Find text",

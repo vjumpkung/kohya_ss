@@ -6,7 +6,8 @@ from .common_gui import (
     get_file_path,
     scriptdir,
     list_files,
-    create_refresh_button, setup_environment
+    create_refresh_button,
+    setup_environment,
 )
 
 from .custom_logging import setup_logging
@@ -95,7 +96,7 @@ def gradio_extract_dylora_tab(headless=False):
             current_save_dir = path
             return list(list_files(path, exts=[".pt", ".safetensors"], all=True))
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             model = gr.Dropdown(
                 label="DyLoRA model (path to the DyLoRA model to extract from)",
                 interactive=True,

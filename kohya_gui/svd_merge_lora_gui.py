@@ -7,7 +7,8 @@ from .common_gui import (
     get_file_path,
     scriptdir,
     list_files,
-    create_refresh_button, setup_environment
+    create_refresh_button,
+    setup_environment,
 )
 
 from .custom_logging import setup_logging
@@ -71,7 +72,7 @@ def svd_merge_lora(
         if not os.path.isfile(model_path):
             log.info(f"The provided model at {model_path} is not a file")
             return False
-        models.append(fr"{model_path}")
+        models.append(rf"{model_path}")
         ratios.append(str(ratio))
         return True
 
@@ -89,7 +90,14 @@ def svd_merge_lora(
         run_cmd.extend(["--ratios"] + ratios)
 
     run_cmd.extend(
-        ["--device", device, "--new_rank", str(new_rank), "--new_conv_rank", str(new_conv_rank)]
+        [
+            "--device",
+            device,
+            "--new_rank",
+            str(new_rank),
+            "--new_conv_rank",
+            str(new_conv_rank),
+        ]
     )
 
     # Log the command
@@ -146,7 +154,7 @@ def gradio_svd_merge_lora_tab(headless=False):
         lora_ext = gr.Textbox(value="*.safetensors *.pt", visible=False)
         lora_ext_name = gr.Textbox(value="LoRA model types", visible=False)
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             lora_a_model = gr.Dropdown(
                 label='LoRA model "A" (path to the LoRA A model)',
                 interactive=True,
@@ -227,7 +235,7 @@ def gradio_svd_merge_lora_tab(headless=False):
                 value=0.25,
                 interactive=True,
             )
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             lora_c_model = gr.Dropdown(
                 label='LoRA model "C" (path to the LoRA C model)',
                 interactive=True,
@@ -327,7 +335,7 @@ def gradio_svd_merge_lora_tab(headless=False):
                 interactive=True,
             )
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             save_to = gr.Dropdown(
                 label="Save to (path for the new LoRA file to save...)",
                 interactive=True,

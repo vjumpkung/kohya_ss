@@ -13,7 +13,7 @@ log = logging.getLogger("sd")
 MIN_PYTHON_VERSION = (3, 10, 9)
 MAX_PYTHON_VERSION = (3, 13, 0)
 LOG_DIR = "../logs/setup/"
-LOG_LEVEL = "INFO" # Set to "INFO" or "WARNING" for less verbose logging
+LOG_LEVEL = "INFO"  # Set to "INFO" or "WARNING" for less verbose logging
 
 
 def check_python_version():
@@ -172,10 +172,7 @@ def install_requirements_inbulk(
     try:
         # Run the command and filter output in real-time
         process = subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
         )
 
         for line in process.stdout:
@@ -368,7 +365,7 @@ def check_repo_version():
             with open(os.path.join("./.release"), "r", encoding="utf8") as file:
                 release = file.read()
 
-            log.info(f"Kohya_ss GUI version: {release}")
+            log.info(f"Kohya_ss GUI version: {release} FORKED by vjumpkung")
         except Exception as e:
             log.error(f"Could not read release: {e}")
     else:

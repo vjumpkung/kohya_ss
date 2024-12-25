@@ -2,7 +2,13 @@ import gradio as gr
 import subprocess
 import os
 import sys
-from .common_gui import get_folder_path, add_pre_postfix, scriptdir, list_dirs, setup_environment
+from .common_gui import (
+    get_folder_path,
+    add_pre_postfix,
+    scriptdir,
+    list_dirs,
+    setup_environment,
+)
 
 from .custom_logging import setup_logging
 
@@ -33,12 +39,15 @@ def caption_images(
 
     log.info(f"GIT captioning files in {train_data_dir}...")
 
-    run_cmd = [fr"{PYTHON}", fr"{scriptdir}/sd-scripts/finetune/make_captions_by_git.py"]
+    run_cmd = [
+        rf"{PYTHON}",
+        rf"{scriptdir}/sd-scripts/finetune/make_captions_by_git.py",
+    ]
 
     # Add --model_id if provided
     if model_id != "":
         run_cmd.append("--model_id")
-        run_cmd.append(fr'{model_id}')
+        run_cmd.append(rf"{model_id}")
 
     # Add other arguments with their values
     run_cmd.append("--batch_size")
@@ -56,17 +65,16 @@ def caption_images(
         run_cmd.append(caption_ext)
 
     # Add the directory containing the training data
-    run_cmd.append(fr"{train_data_dir}")
+    run_cmd.append(rf"{train_data_dir}")
 
     env = setup_environment()
 
     # Reconstruct the safe command string for display
     command_to_run = " ".join(run_cmd)
     log.info(f"Executing command: {command_to_run}")
-            
+
     # Run the command in the sd-scripts folder context
     subprocess.run(run_cmd, env=env)
-
 
     # Add prefix and postfix
     add_pre_postfix(
@@ -85,7 +93,8 @@ def caption_images(
 
 
 def gradio_git_caption_gui_tab(
-    headless=False, default_train_dir=None,
+    headless=False,
+    default_train_dir=None,
 ):
     from .common_gui import create_refresh_button
 
@@ -105,7 +114,7 @@ def gradio_git_caption_gui_tab(
         gr.Markdown(
             "This utility will use GIT to caption files for each images in a folder."
         )
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             train_data_dir = gr.Dropdown(
                 label="Image folder to caption (containing the images to caption)",
                 choices=[""] + list_train_dirs(default_train_dir),

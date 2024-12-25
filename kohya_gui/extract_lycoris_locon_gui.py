@@ -7,7 +7,8 @@ from .common_gui import (
     get_file_path,
     scriptdir,
     list_files,
-    create_refresh_button, setup_environment
+    create_refresh_button,
+    setup_environment,
 )
 
 from .custom_logging import setup_logging
@@ -72,7 +73,7 @@ def extract_lycoris_locon(
         path, ext = os.path.splitext(output_name)
         output_name = f"{path}_tmp{ext}"
 
-    run_cmd = [fr'{PYTHON}', fr'{scriptdir}/tools/lycoris_locon_extract.py']
+    run_cmd = [rf"{PYTHON}", rf"{scriptdir}/tools/lycoris_locon_extract.py"]
 
     if is_sdxl:
         run_cmd.append("--is_sdxl")
@@ -119,19 +120,18 @@ def extract_lycoris_locon(
         run_cmd.append("--disable_cp")
 
     # Add paths
-    run_cmd.append(fr"{base_model}")
-    run_cmd.append(fr"{db_model}")
-    run_cmd.append(fr"{output_name}")
+    run_cmd.append(rf"{base_model}")
+    run_cmd.append(rf"{db_model}")
+    run_cmd.append(rf"{output_name}")
 
     env = setup_environment()
 
     # Reconstruct the safe command string for display
     command_to_run = " ".join(run_cmd)
     log.info(f"Executing command: {command_to_run}")
-            
+
     # Run the command in the sd-scripts folder context
     subprocess.run(run_cmd, env=env)
-
 
     log.info("Done extracting...")
 
@@ -199,7 +199,7 @@ def gradio_extract_lycoris_locon_tab(headless=False):
         model_ext = gr.Textbox(value="*.safetensors *.ckpt", visible=False)
         model_ext_name = gr.Textbox(value="Model types", visible=False)
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             db_model = gr.Dropdown(
                 label="Finetuned model (path to the finetuned model to extract)",
                 interactive=True,
@@ -250,7 +250,7 @@ def gradio_extract_lycoris_locon_tab(headless=False):
                 outputs=base_model,
                 show_progress=False,
             )
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             output_name = gr.Dropdown(
                 label="Save to (path where to save the extracted LoRA model...)",
                 interactive=True,

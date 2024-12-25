@@ -32,10 +32,10 @@ def group_images(
     log.info(f"Grouping images in {input_folder}...")
 
     run_cmd = [
-        fr"{PYTHON}",
+        rf"{PYTHON}",
         f"{scriptdir}/tools/group_images.py",
-        fr"{input_folder}",
-        fr"{output_folder}",
+        rf"{input_folder}",
+        rf"{output_folder}",
         str(group_size),
     ]
 
@@ -56,10 +56,9 @@ def group_images(
     # Reconstruct the safe command string for display
     command_to_run = " ".join(run_cmd)
     log.info(f"Executing command: {command_to_run}")
-            
+
     # Run the command in the sd-scripts folder context
     subprocess.run(run_cmd, env=env)
-
 
     log.info("...grouping done")
 
@@ -85,7 +84,7 @@ def gradio_group_images_gui_tab(headless=False):
             "This utility will group images in a folder based on their aspect ratio."
         )
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             input_folder = gr.Dropdown(
                 label="Input folder (containing the images to group)",
                 interactive=True,

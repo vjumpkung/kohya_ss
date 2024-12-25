@@ -356,10 +356,7 @@ def update_my_data(my_data):
                 # Handle the case where the string is not a valid float
                 my_data[key] = int(1)
 
-    for key in [
-        "max_train_steps",
-        "caption_dropout_every_n_epochs"
-    ]:
+    for key in ["max_train_steps", "caption_dropout_every_n_epochs"]:
         value = my_data.get(key)
         if value is not None:
             try:
@@ -1040,7 +1037,7 @@ def set_pretrained_model_name_or_path_input(
         sdxl = gr.Checkbox(value=detect.Is_SDXL(), visible=True)
         sd3 = gr.Checkbox(value=detect.Is_SD3(), visible=True)
         flux1 = gr.Checkbox(value=detect.Is_FLUX1(), visible=True)
-        #TODO: v_parameterization
+        # TODO: v_parameterization
 
     # If a refresh method is provided, use it to update the choices for the Dropdown widget
     if refresh_method is not None:
@@ -1504,6 +1501,7 @@ def print_command_and_toml(run_cmd, tmpfilename):
         "Here is the trainer command as a reference. It will not be executed:\n"
     )
     # Reconstruct the safe command string for display
+
     command_to_run = " ".join(run_cmd)
 
     print(command_to_run)

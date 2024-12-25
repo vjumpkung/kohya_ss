@@ -7,7 +7,8 @@ from .common_gui import (
     get_file_path,
     scriptdir,
     list_files,
-    create_refresh_button, setup_environment
+    create_refresh_button,
+    setup_environment,
 )
 from .custom_logging import setup_logging
 
@@ -123,7 +124,7 @@ def gradio_convert_lcm_tab(headless=False):
         model_ext = gr.Textbox(value="*.safetensors", visible=False)
         model_ext_name = gr.Textbox(value="Model types", visible=False)
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             model_path = gr.Dropdown(
                 label="Stable Diffusion model to convert to LCM",
                 interactive=True,

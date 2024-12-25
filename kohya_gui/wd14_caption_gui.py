@@ -5,7 +5,8 @@ from .common_gui import (
     add_pre_postfix,
     scriptdir,
     list_dirs,
-    get_executable_path, setup_environment,
+    get_executable_path,
+    setup_environment,
 )
 from .class_gui_config import KohyaSSGUIConfig
 import os
@@ -168,7 +169,7 @@ def gradio_wd14_caption_gui_tab(
 
         # Input Settings
         # with gr.Section('Input Settings'):
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             train_data_dir = gr.Dropdown(
                 label="Image folder to caption (containing the images to caption)",
                 choices=[config.get("wd14_caption.train_data_dir", "")]

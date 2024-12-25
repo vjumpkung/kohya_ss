@@ -56,11 +56,12 @@ class ConfigurationFile:
         # Starts a new group in the GUI for better layout organization.
         with gr.Group():
             # Creates a row within the group to align elements horizontally.
-            with gr.Row():
+            with gr.Row(equal_height=True):
                 # Dropdown for selecting or entering the name of a configuration file.
                 self.config_file_name = gr.Dropdown(
                     label="Load/Save Config file",
-                    choices=[self.config.get("config_dir", "")] + self.list_config_dir(self.current_config_dir),
+                    choices=[self.config.get("config_dir", "")]
+                    + self.list_config_dir(self.current_config_dir),
                     value=self.config.get("config_dir", ""),
                     interactive=True,
                     allow_custom_value=True,

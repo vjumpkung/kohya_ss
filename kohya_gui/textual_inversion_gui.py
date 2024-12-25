@@ -19,8 +19,11 @@ from .common_gui import (
     SaveConfigFile,
     scriptdir,
     update_my_data,
-    validate_file_path, validate_folder_path, validate_model_path,
-    validate_args_setting, setup_environment,
+    validate_file_path,
+    validate_folder_path,
+    validate_model_path,
+    validate_args_setting,
+    setup_environment,
 )
 from .class_accelerate_launch import AccelerateLaunch
 from .class_configuration_file import ConfigurationFile
@@ -145,6 +148,7 @@ def save_configuration(
     multires_noise_discount,
     ip_noise_gamma,
     ip_noise_gamma_random_strength,
+    enable_sample,
     sample_every_n_steps,
     sample_every_n_epochs,
     sample_sampler,
@@ -311,6 +315,7 @@ def open_configuration(
     multires_noise_discount,
     ip_noise_gamma,
     ip_noise_gamma_random_strength,
+    enable_sample,
     sample_every_n_steps,
     sample_every_n_epochs,
     sample_sampler,
@@ -470,6 +475,7 @@ def train_model(
     multires_noise_discount,
     ip_noise_gamma,
     ip_noise_gamma_random_strength,
+    enable_sample,
     sample_every_n_steps,
     sample_every_n_epochs,
     sample_sampler,
@@ -514,13 +520,13 @@ def train_model(
     # Get list of function parameters and values
     parameters = list(locals().items())
     global train_state_value
-    
+
     TRAIN_BUTTON_VISIBLE = [
         gr.Button(visible=True),
         gr.Button(visible=False or headless),
         gr.Textbox(value=train_state_value),
     ]
-    
+
     if executor.is_running():
         log.error("Training is already running. Can't start another training session.")
         return TRAIN_BUTTON_VISIBLE
@@ -530,42 +536,46 @@ def train_model(
     log.info(f"Validating lr scheduler arguments...")
     if not validate_args_setting(lr_scheduler_args):
         return
-    
+
     log.info(f"Validating optimizer arguments...")
     if not validate_args_setting(optimizer_args):
         return
 
     #
     # Validate paths
-    # 
-    
+    #
+
     if not validate_file_path(dataset_config):
         return TRAIN_BUTTON_VISIBLE
-    
+
     if not validate_file_path(log_tracker_config):
         return TRAIN_BUTTON_VISIBLE
-    
-    if not validate_folder_path(logging_dir, can_be_written_to=True, create_if_not_exists=True):
+
+    if not validate_folder_path(
+        logging_dir, can_be_written_to=True, create_if_not_exists=True
+    ):
         return TRAIN_BUTTON_VISIBLE
-    
-    if not validate_folder_path(output_dir, can_be_written_to=True, create_if_not_exists=True):
+
+    if not validate_folder_path(
+        output_dir, can_be_written_to=True, create_if_not_exists=True
+    ):
         return TRAIN_BUTTON_VISIBLE
-    
+
     if not validate_model_path(pretrained_model_name_or_path):
         return TRAIN_BUTTON_VISIBLE
-    
+
     if not validate_folder_path(reg_data_dir):
         return TRAIN_BUTTON_VISIBLE
-    
+
     if not validate_folder_path(resume):
         return TRAIN_BUTTON_VISIBLE
-    
+
     if not validate_folder_path(train_data_dir):
         return TRAIN_BUTTON_VISIBLE
-    
+
     if not validate_model_path(vae):
         return TRAIN_BUTTON_VISIBLE
-    
+
     #
     # End of path validation
     #
@@ -695,7 +705,9 @@ def train_model(
     if lr_warmup_steps > 0:
         lr_warmup_steps = int(lr_warmup_steps)
         if lr_warmup > 0:
-            log.warning("Both lr_warmup and lr_warmup_steps are set. lr_warmup_steps will be used.")
+            log.warning(
+                "Both lr_warmup and lr_warmup_steps are set. lr_warmup_steps will be used."
+            )
     elif lr_warmup != 0:
         lr_warmup_steps = lr_warmup / 100
     else:
@@ -713,7 +725,7 @@ def train_model(
         log.error("accelerate not found")
         return TRAIN_BUTTON_VISIBLE
 
-    run_cmd = [rf'{accelerate_path}', "launch"]
+    run_cmd = [rf"{accelerate_path}", "launch"]
 
     run_cmd = AccelerateLaunch.run_cmd(
         run_cmd=run_cmd,
@@ -790,7 +802,9 @@ def train_model(
         "lr_scheduler": lr_scheduler,
         "lr_scheduler_args": str(lr_scheduler_args).replace('"', "").split(),
         "lr_scheduler_num_cycles": (
-            int(lr_scheduler_num_cycles) if lr_scheduler_num_cycles != "" else int(epoch)
+            int(lr_scheduler_num_cycles)
+            if lr_scheduler_num_cycles != ""
+            else int(epoch)
         ),
         "lr_scheduler_power": lr_scheduler_power,
         "lr_scheduler_type": lr_scheduler_type if lr_scheduler_type != "" else None,
@@ -798,7 +812,9 @@ def train_model(
         "max_bucket_reso": max_bucket_reso,
         "max_timestep": max_timestep if max_timestep != 0 else None,
         "max_token_length": int(max_token_length),
-        "max_train_epochs": int(max_train_epochs) if int(max_train_epochs) != 0 else None,
+        "max_train_epochs": (
+            int(max_train_epochs) if int(max_train_epochs) != 0 else None
+        ),
         "max_train_steps": int(max_train_steps) if int(max_train_steps) != 0 else None,
         "mem_eff_attn": mem_eff_attn,
         "metadata_author": metadata_author,
@@ -833,13 +849,19 @@ def train_model(
         "resume": resume,
         "resume_from_huggingface": resume_from_huggingface,
         "sample_every_n_epochs": (
-            sample_every_n_epochs if sample_every_n_epochs != 0 else None
+            sample_every_n_epochs
+            if sample_every_n_epochs and enable_sample != 0
+            else None
         ),
         "sample_every_n_steps": (
-            sample_every_n_steps if sample_every_n_steps != 0 else None
+            sample_every_n_steps
+            if sample_every_n_steps and enable_sample != 0
+            else None
         ),
-        "sample_prompts": create_prompt_file(sample_prompts, output_dir),
-        "sample_sampler": sample_sampler,
+        "sample_prompts": (
+            create_prompt_file(sample_prompts, output_dir) if enable_sample else None
+        ),
+        "sample_sampler": sample_sampler and enable_sample,
         "save_every_n_epochs": (
             save_every_n_epochs if save_every_n_epochs != 0 else None
         ),
@@ -889,16 +911,16 @@ def train_model(
         for key, value in config_toml_data.items()
         if value not in ["", False, None]
     }
-    
+
     config_toml_data["max_data_loader_n_workers"] = int(max_data_loader_n_workers)
-    
+
     # Sort the dictionary by keys
     config_toml_data = dict(sorted(config_toml_data.items()))
 
     current_datetime = datetime.now()
     formatted_datetime = current_datetime.strftime("%Y%m%d-%H%M%S")
-    tmpfilename = fr"{output_dir}/config_textual_inversion-{formatted_datetime}.toml"
-    
+    tmpfilename = rf"{output_dir}/config_textual_inversion-{formatted_datetime}.toml"
+
     # Save the updated TOML data back to the file
     with open(tmpfilename, "w", encoding="utf-8") as toml_file:
         toml.dump(config_toml_data, toml_file)
@@ -939,7 +961,7 @@ def train_model(
         # Run the command
 
         executor.execute_command(run_cmd=run_cmd, env=env)
-        
+
         train_state_value = time.time()
 
         return (
@@ -1012,7 +1034,7 @@ def ti_tab(
         with gr.Accordion("Parameters", open=False), gr.Column():
             with gr.Accordion("Basic", open="True"):
                 with gr.Group(elem_id="basic_tab"):
-                    with gr.Row():
+                    with gr.Row(equal_height=True):
 
                         def list_embedding_files(path):
                             nonlocal current_embedding_dir
@@ -1121,7 +1143,7 @@ def ti_tab(
 
         global executor
         executor = CommandExecutor(headless=headless)
-        
+
         with gr.Column(), gr.Group():
             with gr.Row():
                 button_print = gr.Button("Print training command")
@@ -1217,6 +1239,7 @@ def ti_tab(
             advanced_training.multires_noise_discount,
             advanced_training.ip_noise_gamma,
             advanced_training.ip_noise_gamma_random_strength,
+            sample.enable_sample,
             sample.sample_every_n_steps,
             sample.sample_every_n_epochs,
             sample.sample_sampler,
@@ -1279,9 +1302,9 @@ def ti_tab(
             outputs=[configuration.config_file_name],
             show_progress=False,
         )
-        
+
         run_state = gr.Textbox(value=train_state_value, visible=False)
-            
+
         run_state.change(
             fn=executor.wait_for_training_to_end,
             outputs=[executor.button_run, executor.button_stop_training],
@@ -1295,7 +1318,8 @@ def ti_tab(
         )
 
         executor.button_stop_training.click(
-            executor.kill_command, outputs=[executor.button_run, executor.button_stop_training]
+            executor.kill_command,
+            outputs=[executor.button_run, executor.button_stop_training],
         )
 
         button_print.click(

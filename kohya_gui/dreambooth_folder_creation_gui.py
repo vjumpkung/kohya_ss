@@ -142,7 +142,7 @@ def gradio_dreambooth_folder_creation_tab(
                 interactive=True,
                 value=config.get(key="dataset_preparation.class_prompt", default=""),
             )
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
 
             def list_train_data_dirs(path):
                 nonlocal current_train_data_dir
@@ -178,18 +178,26 @@ def gradio_dreambooth_folder_creation_tab(
             )
             util_training_images_repeat_input = gr.Number(
                 label="Repeats",
-                value=config.get(key="dataset_preparation.util_training_images_repeat_input", default=40),
+                value=config.get(
+                    key="dataset_preparation.util_training_images_repeat_input",
+                    default=40,
+                ),
                 interactive=True,
                 elem_id="number_input",
             )
             util_training_images_dir_input.change(
-                fn=lambda path: gr.Dropdown(choices=[config.get(key="dataset_preparation.images_folder", default="")] + list_train_data_dirs(path)),
+                fn=lambda path: gr.Dropdown(
+                    choices=[
+                        config.get(key="dataset_preparation.images_folder", default="")
+                    ]
+                    + list_train_data_dirs(path)
+                ),
                 inputs=util_training_images_dir_input,
                 outputs=util_training_images_dir_input,
                 show_progress=False,
             )
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
 
             def list_reg_data_dirs(path):
                 nonlocal current_reg_data_dir
@@ -229,7 +237,7 @@ def gradio_dreambooth_folder_creation_tab(
                 label="Repeats",
                 value=config.get(
                     key="dataset_preparation.util_regularization_images_repeat_input",
-                    default=1
+                    default=1,
                 ),
                 interactive=True,
                 elem_id="number_input",
@@ -240,7 +248,7 @@ def gradio_dreambooth_folder_creation_tab(
                 outputs=util_regularization_images_dir_input,
                 show_progress=False,
             )
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
 
             def list_train_output_dirs(path):
                 nonlocal current_train_output_dir
@@ -272,7 +280,8 @@ def gradio_dreambooth_folder_creation_tab(
             )
             util_training_dir_output.change(
                 fn=lambda path: gr.Dropdown(
-                    choices=[config.get(key="train_data_dir", default="")] + list_train_output_dirs(path)
+                    choices=[config.get(key="train_data_dir", default="")]
+                    + list_train_output_dirs(path)
                 ),
                 inputs=util_training_dir_output,
                 outputs=util_training_dir_output,
@@ -292,9 +301,8 @@ def gradio_dreambooth_folder_creation_tab(
             ],
             show_progress=False,
         )
-        
-        
-        button_copy_info_to_Folders_tab = gr.Button('Copy info to respective fields')
+
+        button_copy_info_to_Folders_tab = gr.Button("Copy info to respective fields")
         button_copy_info_to_Folders_tab.click(
             copy_info_to_Folders_tab,
             inputs=[util_training_dir_output],

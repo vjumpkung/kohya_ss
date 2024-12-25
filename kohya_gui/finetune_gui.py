@@ -159,6 +159,7 @@ def save_configuration(
     multires_noise_discount,
     ip_noise_gamma,
     ip_noise_gamma_random_strength,
+    enable_sample,
     sample_every_n_steps,
     sample_every_n_epochs,
     sample_sampler,
@@ -373,6 +374,7 @@ def open_configuration(
     multires_noise_discount,
     ip_noise_gamma,
     ip_noise_gamma_random_strength,
+    enable_sample,
     sample_every_n_steps,
     sample_every_n_epochs,
     sample_sampler,
@@ -593,6 +595,7 @@ def train_model(
     multires_noise_discount,
     ip_noise_gamma,
     ip_noise_gamma_random_strength,
+    enable_sample,
     sample_every_n_steps,
     sample_every_n_epochs,
     sample_sampler,
@@ -872,7 +875,9 @@ def train_model(
     if lr_warmup_steps > 0:
         lr_warmup_steps = int(lr_warmup_steps)
         if lr_warmup > 0:
-            log.warning("Both lr_warmup and lr_warmup_steps are set. lr_warmup_steps will be used.")
+            log.warning(
+                "Both lr_warmup and lr_warmup_steps are set. lr_warmup_steps will be used."
+            )
     elif lr_warmup != 0:
         lr_warmup_steps = lr_warmup / 100
     else:
@@ -966,7 +971,9 @@ def train_model(
         "fp8_base": fp8_base,
         "full_bf16": full_bf16,
         "full_fp16": full_fp16,
-        "fused_backward_pass": fused_backward_pass if not flux1_checkbox else flux_fused_backward_pass,
+        "fused_backward_pass": (
+            fused_backward_pass if not flux1_checkbox else flux_fused_backward_pass
+        ),
         "fused_optimizer_groups": (
             int(fused_optimizer_groups) if fused_optimizer_groups > 0 else None
         ),
@@ -1039,13 +1046,19 @@ def train_model(
         "resume": resume,
         "resume_from_huggingface": resume_from_huggingface,
         "sample_every_n_epochs": (
-            sample_every_n_epochs if sample_every_n_epochs != 0 else None
+            sample_every_n_epochs
+            if sample_every_n_epochs and enable_sample != 0
+            else None
         ),
         "sample_every_n_steps": (
-            sample_every_n_steps if sample_every_n_steps != 0 else None
+            sample_every_n_steps
+            if sample_every_n_steps and enable_sample != 0
+            else None
         ),
-        "sample_prompts": create_prompt_file(sample_prompts, output_dir),
-        "sample_sampler": sample_sampler,
+        "sample_prompts": (
+            create_prompt_file(sample_prompts, output_dir) if enable_sample else None
+        ),
+        "sample_sampler": sample_sampler and enable_sample,
         "save_every_n_epochs": (
             save_every_n_epochs if save_every_n_epochs != 0 else None
         ),
@@ -1465,6 +1478,7 @@ def finetune_tab(
             advanced_training.multires_noise_discount,
             advanced_training.ip_noise_gamma,
             advanced_training.ip_noise_gamma_random_strength,
+            sample.enable_sample,
             sample.sample_every_n_steps,
             sample.sample_every_n_epochs,
             sample.sample_sampler,

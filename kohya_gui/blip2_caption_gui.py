@@ -221,7 +221,7 @@ def gradio_blip2_caption_gui_tab(headless=False, directory_path=None):
             "This utility uses BLIP2 to caption files for each image in a folder."
         )
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             directory_path_dir = gr.Dropdown(
                 label="Image folder to caption (containing the images to caption)",
                 choices=[""] + list_train_dirs(directory_path),
@@ -320,7 +320,7 @@ def gradio_blip2_caption_gui_tab(headless=False, directory_path=None):
             with gr.Tab("Nucleus sampling"):
                 with gr.Row():
                     do_sample = gr.Checkbox(label="Sample", value=True)
-                    
+
                     temperature = gr.Slider(
                         minimum=0.5,
                         maximum=1.0,

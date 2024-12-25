@@ -272,7 +272,7 @@ def gradio_manual_caption_gui_tab(headless=False, default_images_dir=None):
         page = gr.Number(value=-1, visible=False)
         max_page = gr.Number(value=1, visible=False)
         loaded_images_dir = gr.Text(visible=False)
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             images_dir = gr.Dropdown(
                 label="Image folder to caption (containing the images to caption)",
                 choices=[""] + list_images_dirs(default_images_dir),
@@ -317,7 +317,7 @@ def gradio_manual_caption_gui_tab(headless=False, default_images_dir=None):
             )
 
         # Caption Section
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             quick_tags_text = gr.Textbox(
                 label="Quick Tags",
                 placeholder="Comma separated list of tags",

@@ -2,7 +2,13 @@ import gradio as gr
 import subprocess
 import os
 import sys
-from .common_gui import get_folder_path, add_pre_postfix, scriptdir, list_dirs, setup_environment
+from .common_gui import (
+    get_folder_path,
+    add_pre_postfix,
+    scriptdir,
+    list_dirs,
+    setup_environment,
+)
 from .custom_logging import setup_logging
 
 # Set up logging
@@ -131,7 +137,7 @@ def gradio_blip_caption_gui_tab(headless=False, default_train_dir=None):
         gr.Markdown(
             "This utility uses BLIP to caption files for each image in a folder."
         )
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             train_data_dir = gr.Dropdown(
                 label="Image folder to caption (containing the images to caption)",
                 choices=[""] + list_train_dirs(default_train_dir),
@@ -156,7 +162,7 @@ def gradio_blip_caption_gui_tab(headless=False, default_train_dir=None):
                 outputs=train_data_dir,
                 show_progress=False,
             )
-        with gr.Row():
+        with gr.Row(equal_height=True):
             caption_file_ext = gr.Dropdown(
                 label="Caption file extension",
                 choices=[".cap", ".caption", ".txt"],

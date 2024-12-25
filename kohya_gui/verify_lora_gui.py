@@ -6,7 +6,8 @@ from .common_gui import (
     get_file_path,
     scriptdir,
     list_files,
-    create_refresh_button, setup_environment
+    create_refresh_button,
+    setup_environment,
 )
 
 from .custom_logging import setup_logging
@@ -81,7 +82,7 @@ def gradio_verify_lora_tab(headless=False):
         lora_ext = gr.Textbox(value="*.pt *.safetensors", visible=False)
         lora_ext_name = gr.Textbox(value="LoRA model types", visible=False)
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             lora_model = gr.Dropdown(
                 label="LoRA model (path to the LoRA model to verify)",
                 interactive=True,

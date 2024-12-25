@@ -7,7 +7,8 @@ from .common_gui import (
     get_file_path,
     scriptdir,
     list_files,
-    create_refresh_button, setup_environment
+    create_refresh_button,
+    setup_environment,
 )
 
 from .custom_logging import setup_logging
@@ -37,11 +38,11 @@ def merge_lycoris(
 
     # Build the command to run merge_lycoris.py using list format
     run_cmd = [
-        fr"{PYTHON}",
-        fr"{scriptdir}/tools/merge_lycoris.py",
-        fr"{base_model}",
-        fr"{lycoris_model}",
-        fr"{output_name}",
+        rf"{PYTHON}",
+        rf"{scriptdir}/tools/merge_lycoris.py",
+        rf"{base_model}",
+        rf"{lycoris_model}",
+        rf"{output_name}",
     ]
 
     # Add additional required arguments with their values
@@ -64,10 +65,9 @@ def merge_lycoris(
     # Reconstruct the safe command string for display
     command_to_run = " ".join(run_cmd)
     log.info(f"Executing command: {command_to_run}")
-            
+
     # Run the command in the sd-scripts folder context
     subprocess.run(run_cmd, env=env)
-
 
     log.info("Done merging...")
 
@@ -105,7 +105,7 @@ def gradio_merge_lycoris_tab(headless=False):
         ckpt_ext = gr.Textbox(value="*.safetensors *.ckpt", visible=False)
         ckpt_ext_name = gr.Textbox(value="SD model types", visible=False)
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             base_model = gr.Dropdown(
                 label="SD Model (Optional Stable Diffusion base model)",
                 interactive=True,
@@ -176,7 +176,7 @@ def gradio_merge_lycoris_tab(headless=False):
                 interactive=True,
             )
 
-        with gr.Group(), gr.Row():
+        with gr.Group(), gr.Row(equal_height=True):
             output_name = gr.Dropdown(
                 label="Save to (path for the checkpoint file to save...)",
                 interactive=True,
