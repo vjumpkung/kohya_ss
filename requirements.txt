@@ -1,4 +1,4 @@
-accelerate==0.33.0
+accelerate==0.34.2
 aiofiles==23.2.1
 altair==4.2.2
 dadaptation==3.2
@@ -27,7 +27,7 @@ schedulefree==1.4
 scipy==1.11.4
 # for T5XXL tokenizer (SD3/FLUX)
 sentencepiece==0.2.0
-timm==0.6.12
+timm==0.6.7
 tk==0.1.0
 toml==0.10.2
 transformers==4.40.0

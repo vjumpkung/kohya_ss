@@ -172,7 +172,6 @@ class BasicTraining:
                     "linear",
                     "piecewise_constant",
                     "polynomial",
-                    "reduce_lr_on_plateau",
                     "warmup_stable_decay",
                 ],
                 value=self.config.get("basic.lr_scheduler", self.lr_scheduler_value),
@@ -182,10 +181,7 @@ class BasicTraining:
             self.lr_scheduler_type = gr.Dropdown(
                 label="LR Scheduler type",
                 info="(Optional) custom scheduler module name",
-                choices=[
-                    "",
-                    "CosineAnnealingLR",
-                ],
+                choices=["", "CosineAnnealingLR"],
                 value=self.config.get("basic.lr_scheduler_type", ""),
                 allow_custom_value=True,
             )
