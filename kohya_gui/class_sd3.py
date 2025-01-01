@@ -66,14 +66,23 @@ class sd3Training:
                 return (gr.Group(visible=False), gr.Group(visible=True))
 
         with gr.Accordion(
-            "SD3", open=False, elem_id="sd3_tab", visible=False
+            "SD3",
+            open=False,
+            elem_id="sd3_tab",
+            visible=False,
+            elem_classes="sd3_background",
         ) as sd3_accordion:
             with gr.Group():
-                gr.Markdown("### SD3 Specific Parameters")
                 with gr.Row():
                     self.weighting_scheme = gr.Dropdown(
                         label="Weighting Scheme",
-                        choices=["logit_normal", "sigma_sqrt", "mode", "cosmap"],
+                        choices=[
+                            "logit_normal",
+                            "sigma_sqrt",
+                            "mode",
+                            "cosmap",
+                            "uniform",
+                        ],
                         value=self.config.get("sd3.weighting_scheme", "logit_normal"),
                         interactive=True,
                     )
@@ -93,7 +102,7 @@ class sd3Training:
                         interactive=True,
                     )
 
-                with gr.Row():
+                with gr.Row(equal_height=True):
                     self.clip_l = gr.Textbox(
                         label="CLIP-L Path",
                         placeholder="Path to CLIP-L model",
@@ -194,6 +203,54 @@ class sd3Training:
                         ),
                         info="Cache text encoder outputs to disk to speed up inference",
                         interactive=True,
+                    )
+                with gr.Row():
+                    self.clip_l_dropout_rate = gr.Number(
+                        label="CLIP-L Dropout Rate",
+                        value=self.config.get("sd3.clip_l_dropout_rate", 0.0),
+                        interactive=True,
+                        minimum=0.0,
+                        info="Dropout rate for CLIP-L encoder",
+                    )
+                    self.clip_g_dropout_rate = gr.Number(
+                        label="CLIP-G Dropout Rate",
+                        value=self.config.get("sd3.clip_g_dropout_rate", 0.0),
+                        interactive=True,
+                        minimum=0.0,
+                        info="Dropout rate for CLIP-G encoder",
+                    )
+                    self.t5_dropout_rate = gr.Number(
+                        label="T5 Dropout Rate",
+                        value=self.config.get("sd3.t5_dropout_rate", 0.0),
+                        interactive=True,
+                        minimum=0.0,
+                        info="Dropout rate for T5-XXL encoder",
+                    )
+                with gr.Row():
+                    self.sd3_fused_backward_pass = gr.Checkbox(
+                        label="Fused Backward Pass",
+                        value=self.config.get("sd3.fused_backward_pass", False),
+                        info="Enables the fusing of the optimizer step into the backward pass for each parameter.  Only Adafactor optimizer is supported.",
+                        interactive=True,
+                    )
+                    self.disable_mmap_load_safetensors = gr.Checkbox(
+                        label="Disable mmap load safe tensors",
+                        info="Disable memory mapping when loading the model's .safetensors in SDXL.",
+                        value=self.config.get(
+                            "sd3.disable_mmap_load_safetensors", False
+                        ),
+                    )
+                    self.enable_scaled_pos_embed = gr.Checkbox(
+                        label="Enable Scaled Positional Embeddings",
+                        info="Enable scaled positional embeddings in the model.",
+                        value=self.config.get("sd3.enable_scaled_pos_embed", False),
+                    )
+                    self.pos_emb_random_crop_rate = gr.Number(
+                        label="Positional Embedding Random Crop Rate",
+                        value=self.config.get("sd3.pos_emb_random_crop_rate", 0.0),
+                        interactive=True,
+                        minimum=0.0,
+                        info="Random crop rate for positional embeddings",
                     )
 
                 self.sd3_checkbox.change(

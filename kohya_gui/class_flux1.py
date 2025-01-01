@@ -34,7 +34,7 @@ class flux1Training:
             "Flux.1", open=True, visible=False, elem_classes=["flux1_background"]
         ) as flux1_accordion:
             with gr.Group():
-                with gr.Row():
+                with gr.Row(equal_height=True):
                     self.ae = gr.Textbox(
                         label="VAE Path",
                         placeholder="Path to VAE model",
@@ -202,15 +202,15 @@ class flux1Training:
                     )
 
                 with gr.Row():
-                    self.blocks_to_swap = gr.Slider(
-                        label="Blocks to swap",
-                        value=self.config.get("flux1.blocks_to_swap", 0),
-                        info="The number of blocks to swap. The default is None (no swap). These options must be combined with --fused_backward_pass or --blockwise_fused_optimizers. The recommended maximum value is 36.",
-                        minimum=0,
-                        maximum=57,
-                        step=1,
-                        interactive=True,
-                    )
+                    # self.blocks_to_swap = gr.Slider(
+                    #     label="Blocks to swap",
+                    #     value=self.config.get("flux1.blocks_to_swap", 0),
+                    #     info="The number of blocks to swap. The default is None (no swap). These options must be combined with --fused_backward_pass or --blockwise_fused_optimizers. The recommended maximum value is 36.",
+                    #     minimum=0,
+                    #     maximum=57,
+                    #     step=1,
+                    #     interactive=True,
+                    # )
                     self.single_blocks_to_swap = gr.Slider(
                         label="Single Blocks to swap (depercated)",
                         value=self.config.get("flux1.single_blocks_to_swap", 0),
@@ -251,7 +251,7 @@ class flux1Training:
                         info="Enables the fusing of the optimizer step into the backward pass for each parameter.  Only Adafactor optimizer is supported.",
                         interactive=True,
                     )
-                    
+
                 with gr.Accordion(
                     "Blocks to train",
                     open=True,
@@ -262,16 +262,20 @@ class flux1Training:
                         self.train_double_block_indices = gr.Textbox(
                             label="train_double_block_indices",
                             info="The indices are specified as a list of integers or a range of integers, like '0,1,5,8' or '0,1,4-5,7' or 'all' or 'none'. The number of double blocks is 19.",
-                            value=self.config.get("flux1.train_double_block_indices", "all"),
+                            value=self.config.get(
+                                "flux1.train_double_block_indices", "all"
+                            ),
                             interactive=True,
                         )
                         self.train_single_block_indices = gr.Textbox(
                             label="train_single_block_indices",
                             info="The indices are specified as a list of integers or a range of integers, like '0,1,5,8' or '0,1,4-5,7' or 'all' or 'none'. The number of single blocks is 38.",
-                            value=self.config.get("flux1.train_single_block_indices", "all"),
+                            value=self.config.get(
+                                "flux1.train_single_block_indices", "all"
+                            ),
                             interactive=True,
                         )
-                        
+
                 with gr.Accordion(
                     "Rank for layers",
                     open=False,

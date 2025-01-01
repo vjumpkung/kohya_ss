@@ -81,6 +81,12 @@
   transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
 }
 
+.sd3_background {
+  background: #f4f4f4; /* Light beige tone */
+  padding: 1em;
+  transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+}
+
 .preset_background {
   background: #f4f4f4; /* Light gray */
   padding: 1em;
@@ -139,6 +145,12 @@
 
 .dark .flux1_rank_layers_background {
   background: #172029; /* Dark background for dark theme */
+  padding: 1em;
+  transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .sd3_background {
+  background: #172029;
   padding: 1em;
   transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
 }

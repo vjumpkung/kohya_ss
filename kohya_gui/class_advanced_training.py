@@ -168,6 +168,14 @@ class AdvancedTraining:
                     step=0.01,
                     info="The huber loss parameter. Only used if one of the huber loss modes (huber or smooth l1) is selected with loss_type",
                 )
+                self.huber_scale = gr.Number(
+                    label="Huber scale",
+                    value=self.config.get("advanced.huber_scale", 1.0),
+                    minimum=0.0,
+                    maximum=10.0,
+                    step=0.01,
+                    info="The Huber loss scale parameter. Only used if one of the huber loss modes (huber or smooth l1) is selected with loss_type.",
+                )
 
         with gr.Row():
             self.save_every_n_steps = gr.Number(
@@ -484,6 +492,15 @@ class AdvancedTraining:
                 maximum=32,
                 value=self.config.get("advanced.vae_batch_size", 0),
                 step=1,
+            )
+            self.blocks_to_swap = gr.Slider(
+                label="Blocks to swap",
+                value=self.config.get("advanced.blocks_to_swap", 0),
+                info="The number of blocks to swap. The default is None (no swap). These options must be combined with --fused_backward_pass or --blockwise_fused_optimizers. The recommended maximum value is 36.",
+                minimum=0,
+                maximum=57,
+                step=1,
+                interactive=True,
             )
         with gr.Group(), gr.Row(equal_height=True):
             self.save_state = gr.Checkbox(

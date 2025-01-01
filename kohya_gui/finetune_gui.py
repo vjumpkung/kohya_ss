@@ -168,6 +168,7 @@ def save_configuration(
     loss_type,
     huber_schedule,
     huber_c,
+    huber_scale,
     vae_batch_size,
     min_snr_gamma,
     weighted_captions,
@@ -208,6 +209,7 @@ def save_configuration(
     # SD3 parameters
     sd3_cache_text_encoder_outputs,
     sd3_cache_text_encoder_outputs_to_disk,
+    sd3_fused_backward_pass,
     clip_g,
     clip_l,
     logit_mean,
@@ -383,6 +385,7 @@ def open_configuration(
     loss_type,
     huber_schedule,
     huber_c,
+    huber_scale,
     vae_batch_size,
     min_snr_gamma,
     weighted_captions,
@@ -423,6 +426,7 @@ def open_configuration(
     # SD3 parameters
     sd3_cache_text_encoder_outputs,
     sd3_cache_text_encoder_outputs_to_disk,
+    sd3_fused_backward_pass,
     clip_g,
     clip_l,
     logit_mean,
@@ -604,6 +608,7 @@ def train_model(
     loss_type,
     huber_schedule,
     huber_c,
+    huber_scale,
     vae_batch_size,
     min_snr_gamma,
     weighted_captions,
@@ -644,6 +649,7 @@ def train_model(
     # SD3 parameters
     sd3_cache_text_encoder_outputs,
     sd3_cache_text_encoder_outputs_to_disk,
+    sd3_fused_backward_pass,
     clip_g,
     clip_l,
     logit_mean,
@@ -972,7 +978,9 @@ def train_model(
         "full_bf16": full_bf16,
         "full_fp16": full_fp16,
         "fused_backward_pass": (
-            fused_backward_pass if not flux1_checkbox else flux_fused_backward_pass
+            sd3_fused_backward_pass
+            if sd3_checkbox
+            else flux_fused_backward_pass if flux1_checkbox else fused_backward_pass
         ),
         "fused_optimizer_groups": (
             int(fused_optimizer_groups) if fused_optimizer_groups > 0 else None
@@ -980,6 +988,7 @@ def train_model(
         "gradient_accumulation_steps": int(gradient_accumulation_steps),
         "gradient_checkpointing": gradient_checkpointing,
         "huber_c": huber_c,
+        "huber_scale": huber_scale,
         "huber_schedule": huber_schedule,
         "huggingface_repo_id": huggingface_repo_id,
         "huggingface_token": huggingface_token,
@@ -1127,7 +1136,6 @@ def train_model(
         "blockwise_fused_optimizers": (
             blockwise_fused_optimizers if flux1_checkbox else None
         ),
-        # "flux_fused_backward_pass": see previous assignment of fused_backward_pass in above code
         "cpu_offload_checkpointing": (
             cpu_offload_checkpointing if flux1_checkbox else None
         ),
@@ -1487,6 +1495,7 @@ def finetune_tab(
             advanced_training.loss_type,
             advanced_training.huber_schedule,
             advanced_training.huber_c,
+            advanced_training.huber_scale,
             advanced_training.vae_batch_size,
             advanced_training.min_snr_gamma,
             weighted_captions,
@@ -1538,6 +1547,7 @@ def finetune_tab(
             sd3_training.t5xxl_device,
             sd3_training.t5xxl_dtype,
             sd3_training.sd3_text_encoder_batch_size,
+            sd3_training.sd3_fused_backward_pass,
             sd3_training.weighting_scheme,
             source_model.sd3_checkbox,
             # Flux1 parameters
@@ -1556,7 +1566,7 @@ def finetune_tab(
             flux1_training.blockwise_fused_optimizers,
             flux1_training.flux_fused_backward_pass,
             flux1_training.cpu_offload_checkpointing,
-            flux1_training.blocks_to_swap,
+            advanced_training.blocks_to_swap,
             flux1_training.single_blocks_to_swap,
             flux1_training.double_blocks_to_swap,
             flux1_training.mem_eff_save,
