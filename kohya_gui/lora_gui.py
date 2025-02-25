@@ -1491,6 +1491,7 @@ def train_model(
         "fp8_base_unet": fp8_base_unet if flux1_checkbox else None,
         "full_bf16": full_bf16,
         "full_fp16": full_fp16,
+        "fused_backward_pass": sd3_fused_backward_pass if sd3_checkbox else None,
         "gradient_accumulation_steps": int(gradient_accumulation_steps),
         "gradient_checkpointing": gradient_checkpointing,
         "highvram": highvram,
@@ -1686,7 +1687,7 @@ def train_model(
         "cpu_offload_checkpointing": (
             cpu_offload_checkpointing if flux1_checkbox else None
         ),
-        "blocks_to_swap": blocks_to_swap if flux1_checkbox else None,
+        "blocks_to_swap": blocks_to_swap if flux1_checkbox or sd3_checkbox else None,
         "single_blocks_to_swap": single_blocks_to_swap if flux1_checkbox else None,
         "double_blocks_to_swap": double_blocks_to_swap if flux1_checkbox else None,
     }

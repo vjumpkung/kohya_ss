@@ -201,6 +201,7 @@ def save_configuration(
     # SD3 parameters
     sd3_cache_text_encoder_outputs,
     sd3_cache_text_encoder_outputs_to_disk,
+    sd3_fused_backward_pass,
     clip_g,
     clip_l,
     logit_mean,
@@ -411,6 +412,7 @@ def open_configuration(
     # SD3 parameters
     sd3_cache_text_encoder_outputs,
     sd3_cache_text_encoder_outputs_to_disk,
+    sd3_fused_backward_pass,
     clip_g,
     clip_l,
     logit_mean,
@@ -616,6 +618,7 @@ def train_model(
     # SD3 parameters
     sd3_cache_text_encoder_outputs,
     sd3_cache_text_encoder_outputs_to_disk,
+    sd3_fused_backward_pass,
     clip_g,
     clip_l,
     logit_mean,
@@ -881,6 +884,14 @@ def train_model(
             learning_rate_te2 != None and learning_rate_te2 > 0
         )
 
+    fused_backward_pass_value = False
+    if sd3_checkbox:
+        fused_backward_pass_value = sd3_fused_backward_pass
+    elif flux1_checkbox:
+        fused_backward_pass_value = flux_fused_backward_pass
+    else:
+        fused_backward_pass_value = fused_backward_pass
+
     # def save_huggingface_to_toml(self, toml_file_path: str):
     config_toml_data = {
         # Update the values in the TOML data
@@ -908,9 +919,7 @@ def train_model(
         "fp8_base": fp8_base,
         "full_bf16": full_bf16,
         "full_fp16": full_fp16,
-        "fused_backward_pass": (
-            fused_backward_pass if not flux1_checkbox else flux_fused_backward_pass
-        ),
+        "fused_backward_pass": fused_backward_pass_value,
         "fused_optimizer_groups": (
             int(fused_optimizer_groups) if fused_optimizer_groups > 0 else None
         ),
@@ -1077,7 +1086,7 @@ def train_model(
         "cpu_offload_checkpointing": (
             cpu_offload_checkpointing if flux1_checkbox else None
         ),
-        "blocks_to_swap": blocks_to_swap if flux1_checkbox else None,
+        "blocks_to_swap": blocks_to_swap if flux1_checkbox or sd3_checkbox else None,
         "single_blocks_to_swap": single_blocks_to_swap if flux1_checkbox else None,
         "double_blocks_to_swap": double_blocks_to_swap if flux1_checkbox else None,
         "mem_eff_save": mem_eff_save if flux1_checkbox else None,
@@ -1400,6 +1409,7 @@ def dreambooth_tab(
             # SD3 Parameters
             sd3_training.sd3_cache_text_encoder_outputs,
             sd3_training.sd3_cache_text_encoder_outputs_to_disk,
+            sd3_training.sd3_fused_backward_pass,
             sd3_training.clip_g,
             sd3_training.clip_l,
             sd3_training.logit_mean,
