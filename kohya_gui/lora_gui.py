@@ -1252,6 +1252,16 @@ def train_model(
     if LoRA_type == "Standard" and clip_l_only:
         network_args = f" clip_l_only=true"
 
+    if LoRA_type in ["Standard", "LyCORIS/DyLoRA"]:
+        if loraplus_lr_ratio > 0:
+            network_args += f" loraplus_lr_ratio={loraplus_lr_ratio}"
+        if loraplus_unet_lr_ratio > 0:
+            network_args += f" loraplus_unet_lr_ratio={loraplus_unet_lr_ratio}"
+        if loraplus_text_encoder_lr_ratio > 0:
+            network_args += (
+                f" loraplus_text_encoder_lr_ratio={loraplus_text_encoder_lr_ratio}"
+            )
+
     if LoRA_type == "Flux1":
         # Add a list of supported network arguments for Flux1 below when supported
         kohya_lora_var_list = [
@@ -1315,6 +1325,16 @@ def train_model(
         for key, value in kohya_lora_vars.items():
             if value:
                 network_args += f" {key}={value}"
+
+    if LoRA_type in ["Standard", "LyCORIS/DyLoRA"]:
+        if loraplus_lr_ratio > 0:
+            network_args += f" loraplus_lr_ratio={loraplus_lr_ratio}"
+        if loraplus_unet_lr_ratio > 0:
+            network_args += f" loraplus_unet_lr_ratio={loraplus_unet_lr_ratio}"
+        if loraplus_text_encoder_lr_ratio > 0:
+            network_args += (
+                f" loraplus_text_encoder_lr_ratio={loraplus_text_encoder_lr_ratio}"
+            )
 
     if LoRA_type in ["Kohya LoCon", "Standard"]:
         kohya_lora_var_list = [
@@ -1523,11 +1543,11 @@ def train_model(
         "log_config": log_config,
         "log_tracker_name": log_tracker_name,
         "log_tracker_config": log_tracker_config,
-        "loraplus_lr_ratio": loraplus_lr_ratio if not 0 else None,
-        "loraplus_text_encoder_lr_ratio": (
-            loraplus_text_encoder_lr_ratio if not 0 else None
-        ),
-        "loraplus_unet_lr_ratio": loraplus_unet_lr_ratio if not 0 else None,
+        # "loraplus_lr_ratio": loraplus_lr_ratio if not 0 else None,
+        # "loraplus_text_encoder_lr_ratio": (
+        #     loraplus_text_encoder_lr_ratio if not 0 else None
+        # ),
+        # "loraplus_unet_lr_ratio": loraplus_unet_lr_ratio if not 0 else None,
         "loss_type": loss_type,
         "lowvram": lowvram,
         "lr_scheduler": lr_scheduler,
