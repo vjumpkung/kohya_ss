@@ -1326,16 +1326,6 @@ def train_model(
             if value:
                 network_args += f" {key}={value}"
 
-    if LoRA_type in ["Standard", "LyCORIS/DyLoRA"]:
-        if loraplus_lr_ratio > 0:
-            network_args += f" loraplus_lr_ratio={loraplus_lr_ratio}"
-        if loraplus_unet_lr_ratio > 0:
-            network_args += f" loraplus_unet_lr_ratio={loraplus_unet_lr_ratio}"
-        if loraplus_text_encoder_lr_ratio > 0:
-            network_args += (
-                f" loraplus_text_encoder_lr_ratio={loraplus_text_encoder_lr_ratio}"
-            )
-
     if LoRA_type in ["Kohya LoCon", "Standard"]:
         kohya_lora_var_list = [
             "down_lr_weight",
