@@ -4,16 +4,24 @@ This repository primarily provides a Gradio GUI for [Kohya's Stable Diffusion tr
 
 The GUI allows you to set the training parameters and generate and run the required CLI commands to train the model.
 
+## About this fork
+
+- This forked is improvement UI and try to catch up vjumpkung forked sd-scripts sd3 branch and fix some options that change by library.
+
+- This Branch is fork sd-scripts too please read changelog at https://github.com/vjumpkung/sd-scripts/tree/sd3
+
+
 ## Table of Contents
 
 - [Kohya's GUI](#kohyas-gui)
+  - [About this fork](#about-this-fork)
   - [Table of Contents](#table-of-contents)
   - [🦒 Colab](#-colab)
   - [Installation](#installation)
     - [Windows](#windows)
       - [Windows Pre-requirements](#windows-pre-requirements)
       - [Setup Windows](#setup-windows)
-      - [Optional: CUDNN 8.9.6.50](#optional-cudnn-89650)
+      - [Optional: CUDNN 8.9.6.50 (Don't Need anymore)](#optional-cudnn-89650-dont-need-anymore)
     - [Linux and macOS](#linux-and-macos)
       - [Linux Pre-requirements](#linux-pre-requirements)
       - [Setup Linux](#setup-linux)
@@ -21,6 +29,7 @@ The GUI allows you to set the training parameters and generate and run the requi
     - [Runpod](#runpod)
       - [Manual installation](#manual-installation)
       - [Pre-built Runpod template](#pre-built-runpod-template)
+      - [VastAI Template](#vastai-template)
     - [Docker](#docker)
       - [Get your Docker ready for GPU support](#get-your-docker-ready-for-gpu-support)
         - [Windows](#windows-1)
@@ -56,13 +65,13 @@ The GUI allows you to set the training parameters and generate and run the requi
 
 ## 🦒 Colab
 
-This Colab notebook was not created or maintained by me; however, it appears to function effectively. The source can be found at: <https://github.com/camenduru/kohya_ss-colab>.
+by me using this fork one is giving 99% experience as same as local.
 
-I would like to express my gratitude to camenduru for their valuable contribution. If you encounter any issues with the Colab notebook, please report them on their repository.
+file name is SDXL but works with flux too.
 
-| Colab                                                                                                                                                                          | Info               |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/camenduru/kohya_ss-colab/blob/main/kohya_ss_colab.ipynb) | kohya_ss_gui_colab |
+| Colab                                                                                                                                                                                                      | Info                                       |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/vjumpkung/vjump-sd-webui-colab/blob/main/Colab_SDXL_LoRA_Trainer_by_vjumpkung.ipynb) | Colab_SDXL_LoRA_Trainer_by_vjumpkung.ipynb |
 
 ## Installation
 
@@ -74,6 +83,7 @@ To install the necessary dependencies on a Windows system, follow these steps:
 
 1. Install [Python 3.10.11](https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe).
    - During the installation process, ensure that you select the option to add Python to the 'PATH' environment variable.
+   - You can install python 3.11 and 3.12 too.
 
 2. Install [CUDA 12.4 toolkit](https://developer.nvidia.com/cuda-12-4-0-download-archive?target_os=Windows&target_arch=x86_64).
 
@@ -115,7 +125,7 @@ To set up the project, follow these steps:
 
    During the accelerate config step, use the default values as proposed during the configuration unless you know your hardware demands otherwise. The amount of VRAM on your GPU does not impact the values used.
 
-#### Optional: CUDNN 8.9.6.50
+#### Optional: CUDNN 8.9.6.50 (Don't Need anymore)
 
 The following steps are optional but will improve the learning speed for owners of NVIDIA 30X0/40X0 GPUs. These steps enable larger training batch sizes and faster training speeds.
 
@@ -181,9 +191,11 @@ If you choose to use the interactive mode, the default values for the accelerate
 
 #### Manual installation
 
+(untest with this fork)
+
 To install the necessary components for Runpod and run kohya_ss, follow these steps:
 
-1. Select the Runpod pytorch 2.2.0 template. This is important. Other templates may not work.
+1. Select the Runpod pytorch 2.4.0 with CUDA 12.4 template. This is important. Other templates may not work.
 
 2. SSH into the Runpod.
 
@@ -191,7 +203,7 @@ To install the necessary components for Runpod and run kohya_ss, follow these st
 
    ```shell
    cd /workspace
-   git clone --recursive https://github.com/bmaltais/kohya_ss.git
+   git clone --recursive https://github.com/vjumpkung/kohya_ss.git
    ```
 
 4. Run the setup script:
@@ -217,13 +229,14 @@ To install the necessary components for Runpod and run kohya_ss, follow these st
 
 #### Pre-built Runpod template
 
-To run from a pre-built Runpod template, you can:
+You can use my template with jupyter lab interface to manage files and easy download pre-trained model.
 
-1. Open the Runpod template by clicking on <https://runpod.io/gsc?template=ya6013lj5a&ref=w18gds2n>.
+[Runpod Template URL](https://runpod.io/console/deploy?template=3igg9wcpxk&ref=6h6f9kga)
 
-2. Deploy the template on the desired host.
 
-3. Once deployed, connect to the Runpod on HTTP 3010 to access the kohya_ss GUI. You can also connect to auto1111 on HTTP 3000.
+#### VastAI Template
+
+[VastAI Template URL](https://cloud.vast.ai/?ref_id=193788&creator_id=193788&name=vjumpkung%20kohya-ss%20GUI%20v24.3.0)
 
 ### Docker
 
