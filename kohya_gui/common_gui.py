@@ -23,7 +23,7 @@ log = setup_logging()
 folder_symbol = "\U0001f4c2"  # 📂
 refresh_symbol = "\U0001f504"  # 🔄
 save_style_symbol = "\U0001f4be"  # 💾
-document_symbol = "\U0001F4C4"  # 📄
+document_symbol = "\U0001f4c4"  # 📄
 
 scriptdir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -345,6 +345,10 @@ def update_my_data(my_data):
             except ValueError:
                 # Handle the case where the string is not a valid float
                 my_data[key] = int(0)
+
+    # Fallback some settings
+    if "clip_g_lr" not in my_data.keys():
+        my_data["clip_g_lr"] = float(0)
 
     # Convert values to int if they are strings
     for key in ["lr_scheduler_num_cycles"]:

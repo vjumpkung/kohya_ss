@@ -74,7 +74,7 @@ def initialize_ui_interface(config, headless, use_shell, release_info, readme_co
                 gr.Markdown(readme_content)
 
         # Display release information in a div element
-        gr.Markdown(f"<div class='ver-class'>{release_info} FORKED by vjumpkung</div>")
+        gr.Markdown(f"<div class='ver-class'>{release_info}</div>")
 
     return ui_interface
 

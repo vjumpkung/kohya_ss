@@ -371,7 +371,7 @@ def check_repo_version():
             with open(os.path.join("./.release"), "r", encoding="utf8") as file:
                 release = file.read()
 
-            log.info(f"Kohya_ss GUI version: {release} FORKED by vjumpkung")
+            log.info(f"Kohya_ss GUI version: {release}")
         except Exception as e:
             log.error(f"Could not read release: {e}")
     else:

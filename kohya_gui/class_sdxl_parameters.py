@@ -1,19 +1,22 @@
 import gradio as gr
 from .class_gui_config import KohyaSSGUIConfig
 
+
 class SDXLParameters:
     def __init__(
         self,
         sdxl_checkbox: gr.Checkbox,
         show_sdxl_cache_text_encoder_outputs: bool = True,
+        clip_l_only: bool = False,
         config: KohyaSSGUIConfig = {},
         trainer: str = "",
     ):
         self.sdxl_checkbox = sdxl_checkbox
         self.show_sdxl_cache_text_encoder_outputs = show_sdxl_cache_text_encoder_outputs
+        self.clip_l_only = clip_l_only
         self.config = config
         self.trainer = trainer
-        
+
         self.initialize_accordion()
 
     def initialize_accordion(self):
@@ -24,7 +27,9 @@ class SDXLParameters:
                 self.sdxl_cache_text_encoder_outputs = gr.Checkbox(
                     label="Cache text encoder outputs",
                     info="Cache the outputs of the text encoders. This option is useful to reduce the GPU memory usage. This option cannot be used with options for shuffling or dropping the captions.",
-                    value=self.config.get("sdxl.sdxl_cache_text_encoder_outputs", False),
+                    value=self.config.get(
+                        "sdxl.sdxl_cache_text_encoder_outputs", False
+                    ),
                     visible=self.show_sdxl_cache_text_encoder_outputs,
                 )
                 self.sdxl_no_half_vae = gr.Checkbox(
@@ -51,6 +56,11 @@ class SDXLParameters:
                     info="Disable memory mapping when loading the model's .safetensors in SDXL.",
                     value=self.config.get("sdxl.disable_mmap_load_safetensors", False),
                 )
+                self.clip_l_only = gr.Checkbox(
+                    label="Train LoRA with unet + CLIP-L Only",
+                    info="Train LoRA with unet + CLIP-L Only (Experimental)",
+                    value=self.config.get("sdxl.clip_l_only", False),
+                )
 
                 self.fused_backward_pass.change(
                     lambda fused_backward_pass: gr.Number(
@@ -66,7 +76,6 @@ class SDXLParameters:
                     inputs=[self.fused_optimizer_groups],
                     outputs=[self.fused_backward_pass],
                 )
-
 
         self.sdxl_checkbox.change(
             lambda sdxl_checkbox: gr.Accordion(visible=sdxl_checkbox),

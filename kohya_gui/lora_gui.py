@@ -61,7 +61,7 @@ huggingface = None
 use_shell = False
 train_state_value = time.time()
 
-document_symbol = "\U0001F4C4"  # 📄
+document_symbol = "\U0001f4c4"  # 📄
 
 
 presets_dir = rf"{scriptdir}/presets"
@@ -201,6 +201,7 @@ def save_configuration(
     # sdxl parameters section
     sdxl_cache_text_encoder_outputs,
     sdxl_no_half_vae,
+    clip_l_only,
     ###
     text_encoder_lr,
     t5xxl_lr,
@@ -317,6 +318,7 @@ def save_configuration(
     sd3_text_encoder_batch_size,
     weighting_scheme,
     sd3_checkbox,
+    clip_g_lr,
 ):
     # Get list of function parameters and values
     parameters = list(locals().items())
@@ -485,8 +487,10 @@ def open_configuration(
     # sdxl parameters section
     sdxl_cache_text_encoder_outputs,
     sdxl_no_half_vae,
+    clip_l_only,
     ###
     text_encoder_lr,
+    clip_g_lr,
     t5xxl_lr,
     unet_lr,
     network_dim,
@@ -802,8 +806,10 @@ def train_model(
     # sdxl parameters section
     sdxl_cache_text_encoder_outputs,
     sdxl_no_half_vae,
+    clip_l_only,
     ###
     text_encoder_lr,
+    clip_g_lr,
     t5xxl_lr,
     unet_lr,
     network_dim,
@@ -1242,6 +1248,10 @@ def train_model(
         network_module = "lycoris.kohya"
         network_args = f" preset={LyCORIS_preset} rank_dropout={rank_dropout} module_dropout={module_dropout} rank_dropout_scale={rank_dropout_scale} algo=full train_norm={train_norm}"
 
+    # clip_l_only works with LoRA standard only.
+    if LoRA_type == "Standard" and clip_l_only:
+        network_args = f" clip_l_only=true"
+
     if LoRA_type == "Flux1":
         # Add a list of supported network arguments for Flux1 below when supported
         kohya_lora_var_list = [
@@ -1402,9 +1412,11 @@ def train_model(
 
     text_encoder_lr_list = []
 
-    if text_encoder_lr > 0 and t5xxl_lr > 0:
+    if text_encoder_lr > 0 and t5xxl_lr > 0 and (sd3_checkbox or flux1_checkbox):
         # Set the text_encoder_lr to a combination of text_encoder_lr and t5xxl_lr
         text_encoder_lr_list = [float(text_encoder_lr), float(t5xxl_lr)]
+    elif text_encoder_lr > 0 and clip_g_lr > 0 and sdxl:
+        text_encoder_lr_list = [float(text_encoder_lr), float(clip_g_lr)]
     elif text_encoder_lr > 0:
         # Set the text_encoder_lr to text_encoder_lr only
         text_encoder_lr_list = [float(text_encoder_lr), float(text_encoder_lr)]
@@ -1915,7 +1927,15 @@ def lora_tab(
                     text_encoder_lr = gr.Number(
                         label="Text Encoder learning rate",
                         value=0,
-                        info="(Optional) Set CLIP-L and T5XXL learning rates.",
+                        info="(Optional) Set CLIP-L, CLIP-G and T5XXL learning rates.",
+                        minimum=0,
+                        maximum=1,
+                    )
+
+                    clip_g_lr = gr.Number(
+                        label="CLIP-G learning rate",
+                        value=0,
+                        info="(Optional) Override the CLIP-G learning rate set by the Text Encoder learning rate if you desire a different one. Works with SDXL only",
                         minimum=0,
                         maximum=1,
                     )
@@ -2807,9 +2827,12 @@ def lora_tab(
             advanced_training.vae,
             advanced_training.weighted_captions,
             advanced_training.debiased_estimation_loss,
+            # sdxl parameters
             sdxl_params.sdxl_cache_text_encoder_outputs,
             sdxl_params.sdxl_no_half_vae,
+            sdxl_params.clip_l_only,
             text_encoder_lr,
+            clip_g_lr,
             t5xxl_lr,
             unet_lr,
             network_dim,
