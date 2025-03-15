@@ -141,6 +141,7 @@ class AdvancedTraining:
                 label="Additional parameters",
                 placeholder='(Optional) Use to provide additional parameters not handled by the GUI. Eg: --some_parameters "value"',
                 value=self.config.get("advanced.additional_parameters", ""),
+                elem_classes=["monospace_textbox"],
             )
         with gr.Accordion("Scheduled Huber Loss", open=False):
             with gr.Row():

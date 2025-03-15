@@ -241,6 +241,7 @@ class BasicTraining:
                 lines=2,
                 placeholder="(Optional) eg: milestones=[1,10,30,50] gamma=0.1",
                 value=self.config.get("basic.lr_scheduler_args", ""),
+                elem_classes=["monospace_textbox"],
             )
             # Initialize the optimizer extra arguments textbox
             self.optimizer_args = gr.Textbox(
@@ -248,6 +249,7 @@ class BasicTraining:
                 lines=2,
                 placeholder="(Optional) eg: relative_step=True scale_parameter=True warmup_init=True",
                 value=self.config.get("basic.optimizer_args", ""),
+                elem_classes=["monospace_textbox"],
             )
 
     def init_learning_rate_controls(self) -> None:

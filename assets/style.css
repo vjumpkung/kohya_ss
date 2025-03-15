@@ -60,3 +60,7 @@
 .fillable.svelte-cn1lzi.app {
   max-width: 1536px !important;
 }
+
+.monospace_textbox textarea {
+  font-family: monospace, monospace;
+}

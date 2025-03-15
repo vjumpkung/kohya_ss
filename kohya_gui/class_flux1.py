@@ -266,6 +266,7 @@ class flux1Training:
                                 "flux1.train_double_block_indices", "all"
                             ),
                             interactive=True,
+                            elem_classes=["monospace_textbox"],
                         )
                         self.train_single_block_indices = gr.Textbox(
                             label="train_single_block_indices",
@@ -274,6 +275,7 @@ class flux1Training:
                                 "flux1.train_single_block_indices", "all"
                             ),
                             interactive=True,
+                            elem_classes=["monospace_textbox"],
                         )
 
                 with gr.Accordion(

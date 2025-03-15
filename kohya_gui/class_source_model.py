@@ -15,7 +15,7 @@ from .class_gui_config import KohyaSSGUIConfig
 folder_symbol = "\U0001f4c2"  # 📂
 refresh_symbol = "\U0001f504"  # 🔄
 save_style_symbol = "\U0001f4be"  # 💾
-document_symbol = "\U0001F4C4"  # 📄
+document_symbol = "\U0001f4c4"  # 📄
 
 default_models = [
     "stabilityai/stable-diffusion-xl-base-1.0",
@@ -105,7 +105,7 @@ class SourceModel:
                 model_ext_name = gr.Textbox(value="Model types", visible=False)
 
                 # Define the input elements
-                with gr.Row():
+                with gr.Row(equal_height=True):
                     with gr.Column(), gr.Row(equal_height=True):
                         self.model_list = gr.Textbox(visible=False, value="")
                         self.pretrained_model_name_or_path = gr.Dropdown(
@@ -161,7 +161,7 @@ class SourceModel:
                             value=self.config.get("model.output_name", "last"),
                             interactive=True,
                         )
-                with gr.Row():
+                with gr.Row(equal_height=True):
                     with gr.Column(), gr.Row(equal_height=True):
                         self.train_data_dir = gr.Dropdown(
                             label=(
@@ -246,7 +246,7 @@ class SourceModel:
                             show_progress=False,
                         )
 
-                with gr.Row():
+                with gr.Row(equal_height=True):
                     with gr.Column():
                         with gr.Row():
                             self.v2 = gr.Checkbox(
@@ -421,7 +421,7 @@ class SourceModel:
                     with gr.Column():
                         gr.Group(visible=False)
 
-                with gr.Row():
+                with gr.Row(equal_height=True):
                     self.training_comment = gr.Textbox(
                         label="Training comment",
                         placeholder="(Optional) Add training comment to be included in metadata",
@@ -429,7 +429,7 @@ class SourceModel:
                         value=self.config.get("model.training_comment", ""),
                     )
 
-                with gr.Row():
+                with gr.Row(equal_height=True):
                     self.save_model_as = gr.Radio(
                         save_model_as_choices,
                         label="Save trained model as",
