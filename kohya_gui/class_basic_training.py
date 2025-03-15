@@ -173,6 +173,7 @@ class BasicTraining:
                     "piecewise_constant",
                     "polynomial",
                     "warmup_stable_decay",
+                    "reduce_lr_on_plateau",
                 ],
                 value=self.config.get("basic.lr_scheduler", self.lr_scheduler_value),
             )

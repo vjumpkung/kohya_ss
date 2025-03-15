@@ -35,7 +35,7 @@ def initialize_ui_interface(config, headless, use_shell, release_info, readme_co
     # Create the main Gradio Blocks interface
     ui_interface = gr.Blocks(
         css=css,
-        title=f"kohya-ss sd-scripts GUI {release_info}",
+        title=f"kohya-ss GUI {release_info}",
         theme=gr.themes.Base(
             spacing_size="lg",
             radius_size="lg",
@@ -53,6 +53,8 @@ def initialize_ui_interface(config, headless, use_shell, release_info, readme_co
 
         gr.Markdown(f"# kohya-ss GUI {release_info}")
 
+        with gr.Tab("LoRA"):
+            lora_tab(headless=headless, config=config, use_shell_flag=use_shell)
         with gr.Tab("Dreambooth"):
             (
                 train_data_dir_input,
@@ -62,8 +64,6 @@ def initialize_ui_interface(config, headless, use_shell, release_info, readme_co
             ) = dreambooth_tab(
                 headless=headless, config=config, use_shell_flag=use_shell
             )
-        with gr.Tab("LoRA"):
-            lora_tab(headless=headless, config=config, use_shell_flag=use_shell)
         with gr.Tab("Textual Inversion"):
             ti_tab(headless=headless, config=config, use_shell_flag=use_shell)
         with gr.Tab("Finetuning"):
@@ -82,7 +82,7 @@ def initialize_ui_interface(config, headless, use_shell, release_info, readme_co
                 _ = LoRATools(headless=headless)
         with gr.Tab("About"):
             # About tab to display release information and README content
-            gr.Markdown(f"kohya_ss GUI release {release_info}")
+            gr.Markdown(f"kohya-ss GUI release {release_info}")
             with gr.Tab("README"):
                 gr.Markdown(readme_content)
 
