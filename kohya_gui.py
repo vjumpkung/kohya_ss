@@ -35,11 +35,24 @@ def initialize_ui_interface(config, headless, use_shell, release_info, readme_co
     # Create the main Gradio Blocks interface
     ui_interface = gr.Blocks(
         css=css,
-        title=f"Kohya_ss GUI {release_info}",
-        theme=gr.themes.Origin(radius_size=gr.themes.sizes.radius_lg),
+        title=f"kohya-ss sd-scripts GUI {release_info}",
+        theme=gr.themes.Base(
+            spacing_size="lg",
+            radius_size="lg",
+            font=[
+                gr.themes.GoogleFont("Noto Sans"),
+                "ui-sans-serif",
+                "system-ui",
+                "sans-serif",
+            ],
+            font_mono=["Cascadia Mono", "ui-monospace", "Consolas", "monospace"],
+        ),
     )
     with ui_interface:
         # Create tabs for different functionalities
+
+        gr.Markdown(f"# kohya-ss GUI {release_info}")
+
         with gr.Tab("Dreambooth"):
             (
                 train_data_dir_input,
