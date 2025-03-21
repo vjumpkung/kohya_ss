@@ -204,6 +204,7 @@ def save_configuration(
     clip_l_only,
     ###
     text_encoder_lr,
+    clip_g_lr,
     t5xxl_lr,
     unet_lr,
     network_dim,
@@ -318,7 +319,6 @@ def save_configuration(
     sd3_text_encoder_batch_size,
     weighting_scheme,
     sd3_checkbox,
-    clip_g_lr,
 ):
     # Get list of function parameters and values
     parameters = list(locals().items())
