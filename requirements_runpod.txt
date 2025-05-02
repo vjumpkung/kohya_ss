@@ -1,11 +1,11 @@
---extra-index-url https://download.pytorch.org/whl/cu124
-torch==2.5.0+cu124
-torchvision==0.20.0+cu124
-xformers==0.0.28.post2
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.7.0+cu128
+torchvision==0.22.0+cu128
+xformers==0.0.30
 
-bitsandbytes==0.45.0
-tensorboard==2.14.1
-tensorflow==2.14.0
+bitsandbytes==0.45.5
+tensorboard
+tensorflow
 wheel
 tensorrt
 onnxruntime-gpu==1.19.2
